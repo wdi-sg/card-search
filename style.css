@@ -1,0 +1,10 @@
+.container > div {
+    width: 5rem;
+    height: 4rem;
+    line-height: 1.33rem;
+    text-align: center;
+    border: 1px solid black;
+    box-shadow: 4px 4px 20px lightgray;
+    border-radius: 1rem;
+    padding: 1rem;
+}
