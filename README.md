@@ -3,5 +3,8 @@ The goal is to create a page with a header that contains a search form and a but
 
 Some boilerplate code has been written for you, but they may contain bug which you will have to fix.
 
+## Example of Final Outcome
+![alt text](Solution.png "Solution")
+
 ### Bonus
-Instead of only showing the cards that contain strings that match what the user entered, highlight the part of the text that matches the user's input.
+Instead of only showing the cards that contain strings that match what the user entered, highlight the part of the text that matches the user's input and some of its surrounding words.
