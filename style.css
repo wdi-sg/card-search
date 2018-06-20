@@ -1,10 +1,74 @@
+.container {
+  display: flex;
+  justify-content: center;
+  flex-flow: wrap;
+  padding: 10px 300px;
+}
+
 .container > div {
-    width: 5rem;
-    height: 4rem;
+    cursor: pointer;
+    margin: 20px;
+    width: 120px;
+    height: 100px;
     line-height: 1.33rem;
     text-align: center;
     border: 1px solid black;
     box-shadow: 4px 4px 20px lightgray;
     border-radius: 1rem;
     padding: 1rem;
+    display: inline-block;
+}
+
+.container > div:nth-child(even) {
+  background-color: grey;
+}
+
+.container > .expanded-box {
+  height: 100%;
+}
+
+.highlight {
+  background-color: yellow;
+}
+
+body {
+  margin: 0;
+}
+
+#nav-bar {
+  background-color: black;
+  color: white;
+}
+
+.nav-bar-elements {
+  display: inline-block;
+}
+
+#nav-bar-home {
+  font-size: 24px;
+  padding-left: 40px;
+}
+
+#nav-bar-form {
+  margin-left: 900px;
+}
+
+#form-input {
+  height: 24px;
+}
+
+#form-search-button {
+  font-size: 16px;
+  padding: 4px;
+}
+
+#get-data {
+  cursor: pointer;
+  display: block;
+  padding: 5px 75px;
+  margin: 10px auto;
+  background-color: blue;
+  color: white;
+  border-radius: 20px;
+  font-size: 20px;
 }

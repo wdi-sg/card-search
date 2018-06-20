@@ -1,37 +1,131 @@
 function addDivToPage(divContent){
-    // I intend to use this function to add squares containing some text to the document. IT doesn't seem to be working so well...
-    var element = document.createElement('div');
-    element.textContent = divContent;
-    document.appendChild(element);
-}
+  // create the div
+  var element = document.createElement('div');
 
-function handleDataLoaded(){
-    // This function should take the data that the server sends to you, and show snippets of text inside boxes that are to be displayed in a grid.
+  // set the inner html
+  element.innerHTML = divContent;
 
-    // Every second square should have its background slightly tinted gray to give a chessboard-like aesthetic.
-    
-}
+  // attach the event handler
+  element.addEventListener('click', slideOpenTextBox);
+
+  // get the parent and append child
+  var container = document.querySelector('.container');
+  container.appendChild(element);
+};
+
+function slideOpenTextBox() {
+  // check if the card has the class of expanded box
+  if (this.classList[0] === 'expanded-box') {
+    // remove the class
+    this.classList.remove('expanded-box');
+
+    // get the key for the db (aka the person's name)
+    var key = this.innerHTML.split('<br>')[0]
+
+    // get their message and truncate it
+    var words = db[key].slice(0,25) + "...";
+    var message = key + "</br></br>" + words
+
+    // set the innerhtml of the card to the message
+    this.innerHTML = message
+  } else {
+    // add the class
+    this.classList.add('expanded-box');
+
+    // get the key for the db (aka the person's name)
+    var key = this.innerHTML.split('<br>')[0]
+
+    // get the truncated message including the person's name
+    var currentMessage = this.innerHTML.split('...')[0]
+
+    // get the remaining message
+    var remainingMessage = db[key].slice(25);
+
+
+    if (currentMessage.indexOf("<span class='highlight'>") !== -1 && currentMessage.indexOf('</span>') === -1) {
+        // if the current message has a chopped off span
+        this.innerHTML = currentMessage + "</span>" + remainingMessage;
+    } else {
+        this.innerHTML = currentMessage + remainingMessage;
+    }
+  }
+};
 
 function handleSearch(event){
-    // This function is called when the user clicks the search button. It should make it so that only the squares containing text that match what the user typed in are displayed. Squares that do not contain text that match the user's input should be hidden.
+  // get the input search value
+  var inputSearch = document.querySelector('input').value
 
-    // If the user's input is an empty string, all the squares should be displayed!
+  // get all the cards
+  var allTheCards = document.querySelectorAll('.container > div');
 
-    // Bonus: Highlight the parts of the text that match the user's input.
-}
+  // loop through the cards
+  for (i = 0; i < allTheCards.length; i++) {
+    // get the person's name
+    var myText = allTheCards[i].innerHTML.split('<br>')[0]
 
-// This function is called when the button labeled "Get Data" is pressed. Its purpose is to fetch data from the server, which will arrive in JSON format. But somehow this function sometimes behaves oddly, especially when the connection to the server is unreliable or slow......
+    // get the full message
+    var dbText = db[myText];
+
+    // check if the full message has the input search value
+    var hasText = dbText.includes(inputSearch);
+
+    if (hasText === false) {
+        // full message doesn't have the input search value
+        allTheCards[i].style.display = "none";
+    } else {
+        // full message contains the input search value
+
+        // get everything that is after the person's name
+        var holderArray = allTheCards[i].innerHTML.split('<br>');
+        var visibleText = holderArray[holderArray.length - 1];
+
+        // get starting position of input search in the full message
+        var startOfStringIndex = visibleText.indexOf(inputSearch);
+
+        if (startOfStringIndex !== -1) {
+            // if input search is found in the current visible text
+
+            // get the substring + 5 characters before & after
+            var subString = visibleText.substring(startOfStringIndex - 5, startOfStringIndex + inputSearch.length + 5);
+
+            // get the remainder of the message
+            var endOfString = visibleText.substring(startOfStringIndex + inputSearch.length + 5, visibleText.length - 1);
+
+            // to check whether the substring is at the start of the full message
+            if ( (startOfStringIndex - 5) > 0 ) {
+              var startOfString = visibleText.substring(0, startOfStringIndex - 5);
+            }
+
+            if (startOfString) {
+                // the substring is not at the start of the message
+                allTheCards[i].innerHTML = myText + "<br><br>" + startOfString + "<span class='highlight'>" + subString + "</span>" + endOfString;
+            } else {
+                // the substring is at the start of the message
+                allTheCards[i].innerHTML = myText + "<br><br>" + "<span class='highlight'>" + subString + "</span>" + endOfString;
+            }
+
+        }
+
+    }
+  }
+};
+
 function getData(){
-    var xhr = new XMLHttpRequest();
-    xhr.addEventListener('error', function(){console.log('Something went wrong')});
-    xhr.addEventListener('load', handleDataLoaded);
-    xhr.open('GET', '/db.json', false);
-    xhr.send();
-}
+  // empty out all the cards
+  var container = document.querySelector('.container');
+  container.innerHTML = "";
+
+  // loop through the keys in the db and get the messages
+  for (var keys in db) {
+    var words = db[keys].slice(0,25) + "...";
+    var message = keys + "</br></br>" + words
+    addDivToPage(message);
+  }
+};
 
 document.addEventListener('DOMContentLoaded', function(){
-    var searchInput = document.querySelectorAll('input')[1];
+    var searchInput = document.querySelector('#form-search-button');
     searchInput.addEventListener('click', handleSearch);
 
-    document.querySelector('button').addEventListener('click', getData);
+    document.querySelector('#get-data').addEventListener('click', getData);
 })
