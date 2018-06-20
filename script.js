@@ -5,9 +5,39 @@ function addDivToPage(divContent){
     document.appendChild(element);
 }
 
-function handleDataLoaded(){
+function handleDataLoaded(response){
     // This function should take the data that the server sends to you, and show snippets of text inside boxes that are to be displayed in a grid.
+    var res = JSON.parse(this.responseText);
+    console.log(res);
+    var con = document.getElementsByClassName('container')[0];
+    var count = 0;
+    for(var key in res) {
+        console.log(key);
+        var stuff = document.createElement('div');
+        stuff.classList.add('box');
 
+        var heading = document.createElement('div');
+        var quote = document.createElement('div');
+
+        //to cut the words in the quote
+        var arr = res[key].split('');
+        arr = arr.slice(0,20);
+        arr.push('...');
+
+        heading.innerText = key.toString();
+        quote.innerText = arr.join('');
+
+        //to make the chessboard effect
+        if(count%2 == 0) {
+            stuff.style.backgroundColor = 'grey';
+        }
+        count++;
+
+        stuff.appendChild(heading);
+        stuff.appendChild(document.createElement('br'));
+        stuff.appendChild(quote);
+        con.appendChild(stuff);
+    }
     // Every second square should have its background slightly tinted gray to give a chessboard-like aesthetic.
     
 }
@@ -25,7 +55,7 @@ function getData(){
     var xhr = new XMLHttpRequest();
     xhr.addEventListener('error', function(){console.log('Something went wrong')});
     xhr.addEventListener('load', handleDataLoaded);
-    xhr.open('GET', '/db.json', false);
+    xhr.open('GET', 'http://10.193.240.98/names/', true);
     xhr.send();
 }
 
