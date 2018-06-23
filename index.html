@@ -5,20 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="style.css">
+    <script type="text/javascript" src="db.js"></script>
     <script src="script.js"></script>
     <title>Cloud Cuckoolanders</title>
 </head>
 <body>
-    My Super Awesome Site
-    <form>
-        <input type="text" name="searchString" />
-        <input type="submit" value="Search">
-    </form>
-    <button>Get Data</button>
-    <div class="container">
-        <div>
-            It's boxing time! Make a box!
+    <div id="header">
+        <div id="headerLeft">
+            <span id="heading">My Super Awesome Site</span>
         </div>
+    <!-- <form> -->
+        <div id="headerRight">
+            <input id="search" type="text" name="searchString" />
+            <input type="submit" value="Search">
+        </div>
+    <!-- </form> -->
     </div>
+    <div id="button">
+        <button>Get Data</button>
+    </div>
+    <div class="grid-container"></div>
 </body>
 </html>
